@@ -11,7 +11,7 @@ def index(request):
         pub_date__lte=timezone.now(),
         category__is_published=True
     ).order_by('-pub_date')[:5]
-
+    
     context = {'posts': post_list}
     return render(request, template, context)
 
@@ -21,7 +21,6 @@ def post_detail(request, post_id):
         Post,
         pk=post_id,
         is_published=True,
-        pub_date__lte=timezone.now(),
         category__is_published=True
     )
     return render(request, 'blog/detail.html', {'post': post})
@@ -38,7 +37,7 @@ def category_posts(request, category_slug):
         is_published=True,
         pub_date__lte=timezone.now()
     ).order_by('-pub_date')
-
+    
     context = {
         'category': category,
         'posts': post_list,
