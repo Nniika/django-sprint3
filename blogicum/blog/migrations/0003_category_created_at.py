@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='category',
             name='created_at',
-            field=models.DateTimeField(auto_now_add=True, null=True, verbose_name='Добавлено'),
+            field=models.DateTimeField(
+                auto_now_add=True, null=True, verbose_name='Добавлено'),
         ),
     ]

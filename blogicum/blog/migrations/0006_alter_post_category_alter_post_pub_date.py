@@ -14,11 +14,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='post',
             name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.category', verbose_name='Категория'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='blog.category', verbose_name='Категория'),
         ),
         migrations.AlterField(
             model_name='post',
             name='pub_date',
-            field=models.DateTimeField(help_text='Если установить дату и время в будущем, можно делать отложенные публикации.', verbose_name='Дата и время публикации'),
+            field=models.DateTimeField(
+                help_text='Если установить дату и время в будущем, можно делать отложенные публикации.', verbose_name='Дата и время публикации'),
         ),
     ]
