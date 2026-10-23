@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models.signals import pre_delete
-from django.dispatch import receiver
 
 User = get_user_model()
 
@@ -98,8 +96,3 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
-
-
-@receiver(pre_delete, sender=Category)
-def delete_posts_on_category_delete(sender, instance, **kwargs):
-    Post.objects.filter(category=instance).delete()
