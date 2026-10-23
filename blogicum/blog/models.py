@@ -33,7 +33,7 @@ class Category(models.Model):
         return self.title
 
     def delete(self, *args, **kwargs):
-        # Принудительно удаляем все посты этой категории перед удалением самой категории
+        # Удаляем все посты этой категории перед удалением самой категории
         self.post_set.all().delete()
         super().delete(*args, **kwargs)
 
