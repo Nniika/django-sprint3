@@ -2,23 +2,34 @@ from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
 from .models import Post, Category
+from .constants import POSTS_PER_PAGE
+
+
+def get_published_posts():
+    """Возвращает QuerySet опубликованных постов с оптимизацией."""
+    return Post.objects.select_related(
+        'category', 'location', 'author'
+    ).filter(
+        is_published=True,
+        pub_date__lte=timezone.now(),
+        category__is_published=True
+    )
 
 
 def index(request):
     template = 'blog/index.html'
-    post_list = Post.objects.filter(
-        is_published=True,
-        pub_date__lte=timezone.now(),
-        category__is_published=True
-    ).order_by('-pub_date')[:5]
+    # Используем функцию и константу
+    post_list = get_published_posts()[:POSTS_PER_PAGE]
 
-    context = {'posts': post_list}
+    context = {'post_list': post_list}
     return render(request, template, context)
 
 
 def post_detail(request, post_id):
+    # Здесь тоже можно использовать функцию фильтрации,
+    # но так как мы ищем по ID, достаточно добавить select_related
     post = get_object_or_404(
-        Post,
+        Post.objects.select_related('category', 'location', 'author'),
         pk=post_id,
         is_published=True,
         pub_date__lte=timezone.now(),
@@ -34,13 +45,13 @@ def category_posts(request, category_slug):
         slug=category_slug,
         is_published=True
     )
-    post_list = category.post_set.filter(
-        is_published=True,
-        pub_date__lte=timezone.now()
-    ).order_by('-pub_date')
+    # Используем функцию фильтрации для постов категории
+    post_list = get_published_posts().filter(
+        category=category
+    )
 
     context = {
         'category': category,
-        'posts': post_list,
+        'post_list': post_list,
     }
     return render(request, template, context)
